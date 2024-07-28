@@ -1,22 +1,26 @@
-name: Check Tiktok Live
+name: Check TikTok Live
 
 on:
   schedule:
-  - cron: '*/10 * * * *'
+    - cron: '*/5 * * * *'  # Runs every 5 minutes
 
 jobs:
-  check-tiktok:
-  - runs-on: ubuntu-latest
-  steps:
-  - uses: actions/checkout@v2
-  - name: Use Node.js
-    uses: actions/setup-node@v2
-    with:
-      node-version: '14'
-  - run: npm ci
-  - name: Run Tiktok live checker
-    run: node app.js
-    env:
-      TOKEN: ${{secrets.TOKEN}}
-      USERNAME_TELEGRAM: ${{secrets.USERNAME_TELEGRAM}}
-      USERNAME_TIKTOK: ${{secrets.USERNAME_TIKTOK}}
+  check-tiktok-live:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Use Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '14'
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Trigger Vercel function
+      env:
+        VERCEL_URL: ${{ secrets.VERCEL_URL }}
+      run: |
+        curl -X GET https://$VERCEL_URL/api/check-tiktok-live
