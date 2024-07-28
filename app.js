@@ -1,17 +1,28 @@
-const puppeteer = require("puppeteer");
+const chromium = require("chrome-aws-lambda");
+const puppeteer = require("puppeteer-core");
 const bot = require("./utils/telegram");
 require("dotenv").config();
 
 const USERNAME_TELEGRAM = process.env.USERNAME_TELEGRAM;
 const USERNAME_TIKTOK = process.env.USERNAME_TIKTOK;
 
-console.log("Telegram username/chat ID:", USERNAME_TELEGRAM);
-console.log("TikTok username to monitor:", USERNAME_TIKTOK);
+module.exports = async (req, res) => {
+  console.log("Telegram username/chat ID:", USERNAME_TELEGRAM);
+  console.log("TikTok username to monitor:", USERNAME_TIKTOK);
 
-async function checkTiktokLive() {
-  const browser = await puppeteer.launch({ headless: false });
-  const page = await browser.newPage();
+  let browser = null;
+
   try {
+    console.log("Launching browser");
+    browser = await puppeteer.launch({
+      args: chromium.args,
+      defaultViewport: chromium.defaultViewport,
+      executablePath: await chromium.executablePath,
+      headless: chromium.headless,
+    });
+
+    const page = await browser.newPage();
+
     if (!bot) {
       throw new Error("Telegram bot is not initialized properly");
     }
@@ -27,28 +38,42 @@ async function checkTiktokLive() {
     console.log(`Is ${USERNAME_TIKTOK} live:`, isLive);
 
     if (isLive) {
+      const screenshot = await page.screenshot({ encoding: "base64" });
       console.log(
         "User is live. Waiting for 3 seconds before taking screenshot..."
       );
-      await new Promise((resolve) => setTimeout(resolve, 3000));
-      console.log("Taking screenshot...");
-      await page.screenshot({ path: "screenshot.png" });
-      console.log("Screenshot taken. Sending to Telegram...");
-      await bot.sendPhoto(USERNAME_TELEGRAM, "screenshot.png", {
-        caption: `${USERNAME_TIKTOK} is live!`,
-      });
-      console.log("Screenshot sent to Telegram");
+      try {
+        await new Promise((resolve) => setTimeout(resolve, 3000));
+        console.log("Taking screenshot...");
+
+        await bot.sendPhoto(
+          USERNAME_TELEGRAM,
+          Buffer.from(screenshot, "base64"),
+          {
+            caption: `@${USERNAME_TIKTOK} is live!`,
+          }
+        );
+        console.log("Screenshot sent to Telegram");
+      } catch (e) {
+        console.log(e.response.body);
+        throw error;
+      }
+      res
+        .status(200)
+        .json({ message: "User is live, screenshot sent to Telegram" });
     } else {
       console.log("User is not live");
+      res.status(200).json({ message: "User is not live" });
     }
   } catch (e) {
     console.error("Error:", e.message);
     if (e.response) {
       console.error("Response body:", e.response.body);
     }
+    res.status(500).json({ error: error.message });
   } finally {
-    await browser.close();
+    if (browser !== null) {
+      await browser.close();
+    }
   }
-}
-
-checkTiktokLive();
+};
