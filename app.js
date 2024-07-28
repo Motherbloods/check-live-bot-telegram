@@ -31,14 +31,14 @@ module.exports = async (req, res) => {
 
       console.log("Checking TikTok live status...");
       await page.goto(`https://www.tiktok.com/${USERNAME_TIKTOK}/live`, {
-        waitUntil: "domcontentloaded", // Lebih cepat daripada "networkidle2"
+        waitUntil: "networkidle2", // Lebih cepat daripada "networkidle2"
         timeout: 60000,
       });
 
       const isLive = await page.evaluate(() => {
         return document.body.innerText.includes("LIVE has ended");
       });
-      console.log(`Is ${USERNAME_TIKTOK} live:`, isLive);
+      console.log(`Is ${USERNAME_TIKTOK} live:`, isLive, "kalau ini ", !isLive);
 
       if (!isLive) {
         console.log(
