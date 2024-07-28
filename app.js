@@ -31,7 +31,7 @@ module.exports = async (req, res) => {
 
       console.log("Checking TikTok live status...");
       await page.goto(`https://www.tiktok.com/${USERNAME_TIKTOK}/live`, {
-        waitUntil: "networkidle2", // Lebih cepat daripada "networkidle2"
+        waitUntil: "domcontentloaded", // Lebih cepat daripada "networkidle2"
         timeout: 60000,
       });
 
