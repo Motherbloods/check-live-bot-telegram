@@ -44,7 +44,7 @@ module.exports = async (req, res) => {
         "User is live. Waiting for 10 seconds before taking screenshot..."
       );
       try {
-        for (let i = 1; i <= 10; i++) {
+        for (let i = 1; i <= 3; i++) {
           await new Promise((resolve) =>
             setTimeout(() => {
               console.log(`Waited ${i} second${i > 1 ? "s" : ""}`);
@@ -54,7 +54,7 @@ module.exports = async (req, res) => {
         }
         console.log("Taking screenshot...");
         const screenshot = await page.screenshot({ encoding: "base64" });
-
+        console.log("is screenshot");
         await bot.sendPhoto(
           USERNAME_TELEGRAM,
           Buffer.from(screenshot, "base64"),
