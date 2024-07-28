@@ -69,7 +69,7 @@ module.exports = async (req, res) => {
     } catch (e) {
       console.error("Error:", e.message);
       if (e.response) {
-        console.error("Response body:", e.response.body);
+        console.error("Response body:", e);
       }
       res.status(500).json({ error: e.message });
     } finally {
