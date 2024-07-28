@@ -8,8 +8,8 @@ const USERNAME_TIKTOK = process.env.USERNAME_TIKTOK;
 
 module.exports = async (req, res) => {
   if (req.method === "GET" && req.url === "/live") {
-    console.log("Telegram username/chat ID:", USERNAME_TELEGRAM);
-    console.log("TikTok username to monitor:", USERNAME_TIKTOK);
+    // console.log("Telegram username/chat ID:", USERNAME_TELEGRAM);
+    // console.log("TikTok username to monitor:", USERNAME_TIKTOK);
 
     let browser = null;
 
@@ -38,9 +38,9 @@ module.exports = async (req, res) => {
       const isLive = await page.evaluate(() => {
         return !document.body.innerText.includes("LIVE has ended");
       });
-      console.log(`Is ${USERNAME_TIKTOK} live:`, isLive);
+      // console.log(`Is ${USERNAME_TIKTOK} live:`, isLive);
 
-      if (isLive) {
+      if (!isLive) {
         console.log(
           "User is live. Waiting for 10 seconds before taking screenshot..."
         );
@@ -73,6 +73,10 @@ module.exports = async (req, res) => {
           .json({ message: "User is live, screenshot sent to Telegram" });
       } else {
         console.log("User is not live");
+        await bot.sendMessage(
+          USERNAME_TELEGRAM,
+          `${USERNAME_TIKTOK} is not live!`
+        );
         res.status(200).json({ message: "User is not live" });
       }
     } catch (e) {

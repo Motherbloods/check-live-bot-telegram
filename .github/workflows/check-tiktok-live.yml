@@ -17,7 +17,7 @@
           node-version: '14'
 
       - name: Install dependencies
-        run: npm ci
+        run: npm install
 
       - name: Trigger Vercel function
         env:
