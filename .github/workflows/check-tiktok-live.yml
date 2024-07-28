@@ -23,4 +23,4 @@
         env:
           VERCEL_URL: ${{ secrets.VERCEL_URL }}
         run: |
-          curl -X GET https://$VERCEL_URL/api/check-tiktok-live
+          curl -X GET https://$VERCEL_URL/live

@@ -7,7 +7,7 @@ const USERNAME_TELEGRAM = process.env.USERNAME_TELEGRAM;
 const USERNAME_TIKTOK = process.env.USERNAME_TIKTOK;
 
 module.exports = async (req, res) => {
-  if (req.method === "GET" && req.url === "/api/check-tiktok-live") {
+  if (req.method === "GET" && req.url === "/live") {
     console.log("Telegram username/chat ID:", USERNAME_TELEGRAM);
     console.log("TikTok username to monitor:", USERNAME_TIKTOK);
 
@@ -50,7 +50,7 @@ module.exports = async (req, res) => {
               setTimeout(() => {
                 console.log(`Waited ${i} second${i > 1 ? "s" : ""}`);
                 resolve();
-              }, 30000)
+              }, 1000)
             );
           }
           console.log("Taking screenshot...");
