@@ -40,45 +40,38 @@ module.exports = async (req, res) => {
       });
       console.log(`Is ${USERNAME_TIKTOK} live:`, isLive, "kalau ini ", !isLive);
 
-      if (!isLive) {
-        console.log(
-          "User is live. Waiting for 10 seconds before taking screenshot..."
-        );
-        try {
-          for (let i = 1; i <= 30; i++) {
-            await new Promise((resolve) =>
-              setTimeout(() => {
-                console.log(`Waited ${i} second${i > 1 ? "s" : ""}`);
-                resolve();
-              }, 1000)
-            );
-          }
-          console.log("Taking screenshot...");
-          const screenshot = await page.screenshot({ encoding: "base64" });
-
-          await bot.sendPhoto(
-            USERNAME_TELEGRAM,
-            Buffer.from(screenshot, "base64"),
-            {
-              caption: `${USERNAME_TIKTOK} is live!`,
-            }
+      console.log(
+        "User is live. Waiting for 10 seconds before taking screenshot..."
+      );
+      try {
+        for (let i = 1; i <= 20; i++) {
+          await new Promise((resolve) =>
+            setTimeout(() => {
+              console.log(`Waited ${i} second${i > 1 ? "s" : ""}`);
+              resolve();
+            }, 1000)
           );
-          console.log("Screenshot sent to Telegram");
-        } catch (e) {
-          console.log(e.response.body);
-          throw e;
         }
-        res
-          .status(200)
-          .json({ message: "User is live, screenshot sent to Telegram" });
-      } else {
-        console.log("User is not live");
-        await bot.sendMessage(
+        console.log("Taking screenshot...");
+        const screenshot = await page.screenshot({ encoding: "base64" });
+
+        await bot.sendPhoto(
           USERNAME_TELEGRAM,
-          `${USERNAME_TIKTOK} is not live!`
+          Buffer.from(screenshot, "base64"),
+          {
+            caption: `${USERNAME_TIKTOK} is ${isLive ? "Not Live" : "Live"}`,
+          }
         );
-        res.status(200).json({ message: "User is not live" });
+        console.log("Screenshot sent to Telegram");
+      } catch (e) {
+        console.log(e.response.body);
+        throw e;
       }
+      res.status(200).json({
+        message: `User ${
+          isLive ? "is not Live" : "is live, screenshot sent to Telegram"
+        }`,
+      });
     } catch (e) {
       console.error("Error:", e.message);
       if (e.response) {
