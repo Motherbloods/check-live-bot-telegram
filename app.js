@@ -45,12 +45,12 @@ module.exports = async (req, res) => {
           "User is live. Waiting for 10 seconds before taking screenshot..."
         );
         try {
-          for (let i = 1; i <= 10; i++) {
+          for (let i = 1; i <= 30; i++) {
             await new Promise((resolve) =>
               setTimeout(() => {
                 console.log(`Waited ${i} second${i > 1 ? "s" : ""}`);
                 resolve();
-              }, 1000)
+              }, 30000)
             );
           }
           console.log("Taking screenshot...");
