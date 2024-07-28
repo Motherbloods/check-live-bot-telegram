@@ -41,19 +41,26 @@ module.exports = async (req, res) => {
       console.log(`Is ${USERNAME_TIKTOK} live:`, isLive);
 
       if (isLive) {
-        const screenshot = await page.screenshot({ encoding: "base64" });
         console.log(
-          "User is live. Waiting for 3 seconds before taking screenshot..."
+          "User is live. Waiting for 10 seconds before taking screenshot..."
         );
         try {
-          await new Promise((resolve) => setTimeout(resolve, 10000));
+          for (let i = 1; i <= 10; i++) {
+            await new Promise((resolve) =>
+              setTimeout(() => {
+                console.log(`Waited ${i} second${i > 1 ? "s" : ""}`);
+                resolve();
+              }, 1000)
+            );
+          }
           console.log("Taking screenshot...");
+          const screenshot = await page.screenshot({ encoding: "base64" });
 
           await bot.sendPhoto(
             USERNAME_TELEGRAM,
             Buffer.from(screenshot, "base64"),
             {
-              caption: `@${USERNAME_TIKTOK} is live!`,
+              caption: `${USERNAME_TIKTOK} is live!`,
             }
           );
           console.log("Screenshot sent to Telegram");
