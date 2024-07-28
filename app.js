@@ -20,6 +20,7 @@ module.exports = async (req, res) => {
         defaultViewport: chromium.defaultViewport,
         executablePath: await chromium.executablePath(),
         headless: chromium.headless,
+        timeout: 60000, // Set timeout to 30 seconds
       });
 
       const page = await browser.newPage();
