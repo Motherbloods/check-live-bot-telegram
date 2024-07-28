@@ -10,8 +10,7 @@ module.exports = async (req, res) => {
   if (req.method === "GET" && req.url === "/api/check-tiktok-live") {
     console.log("Telegram username/chat ID:", USERNAME_TELEGRAM);
     console.log("TikTok username to monitor:", USERNAME_TIKTOK);
-    console.log("Chromium executable path:", await chromium.executablePath());
-    console.log("Chromium version:", await chromium.version());
+
     let browser = null;
 
     try {
