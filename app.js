@@ -36,7 +36,7 @@ module.exports = async (req, res) => {
       });
 
       const isLive = await page.evaluate(() => {
-        return !document.body.innerText.includes("LIVE has ended");
+        return document.body.innerText.includes("LIVE has ended");
       });
       // console.log(`Is ${USERNAME_TIKTOK} live:`, isLive);
 
