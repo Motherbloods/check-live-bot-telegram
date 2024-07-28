@@ -46,7 +46,7 @@ module.exports = async (req, res) => {
           "User is live. Waiting for 3 seconds before taking screenshot..."
         );
         try {
-          await new Promise((resolve) => setTimeout(resolve, 3000));
+          await new Promise((resolve) => setTimeout(resolve, 10000));
           console.log("Taking screenshot...");
 
           await bot.sendPhoto(
