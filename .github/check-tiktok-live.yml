@@ -1,0 +1,22 @@
+name: Check Tiktok Live
+
+on:
+  schedule:
+  - cron: '*/10 * * * *'
+
+jobs:
+  check-tiktok:
+  - runs-on: ubuntu-latest
+  steps:
+  - uses: actions/checkout@v2
+  - name: Use Node.js
+    uses: actions/setup-node@v2
+    with:
+      node-version: '14'
+  - run: npm ci
+  - name: Run Tiktok live checker
+    run: node app.js
+    env:
+      TOKEN: ${{secrets.TOKEN}}
+      USERNAME_TELEGRAM: ${{secrets.USERNAME_TELEGRAM}}
+      USERNAME_TIKTOK: ${{secrets.USERNAME_TIKTOK}}
