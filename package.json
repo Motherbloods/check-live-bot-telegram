@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "@sparticuz/chromium": "^126.0.0",
     "@vercel/node": "^3.2.7",
     "chrome-aws-lambda": "~6.0.0",
     "dotenv": "^16.4.5",

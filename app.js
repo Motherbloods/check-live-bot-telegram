@@ -1,4 +1,4 @@
-const chromium = require("chrome-aws-lambda");
+const chromium = require("@sparticuz/chromium");
 const puppeteer = require("puppeteer-core");
 const bot = require("./utils/telegram");
 require("dotenv").config();
