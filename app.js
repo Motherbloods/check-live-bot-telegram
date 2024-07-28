@@ -40,7 +40,7 @@ module.exports = async (req, res) => {
       });
       console.log(`Is ${USERNAME_TIKTOK} live:`, isLive);
 
-      if (!isLive) {
+      if (isLive) {
         console.log(
           "User is live. Waiting for 10 seconds before taking screenshot..."
         );
