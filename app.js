@@ -72,9 +72,7 @@ module.exports = async (req, res) => {
         throw e;
       }
       res.status(200).json({
-        message: `User ${
-          isLive ? "is live, screenshot sent to Telegram" : "is not Live"
-        }`,
+        message: `User`,
       });
     } catch (e) {
       console.error("Error:", e.message);
