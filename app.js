@@ -52,7 +52,9 @@ module.exports = async (req, res) => {
       console.log(`Is ${USERNAME_TIKTOK} live:`, isLive);
 
       console.log(
-        "User is live. Waiting for 10 seconds before taking screenshot..."
+        `User is ${
+          isLive ? "live" : "not live"
+        } Waiting for 10 seconds before taking screenshot...`
       );
       try {
         for (let i = 1; i <= 30; i++) {
@@ -70,7 +72,7 @@ module.exports = async (req, res) => {
           USERNAME_TELEGRAM,
           Buffer.from(screenshot, "base64"),
           {
-            caption: `${USERNAME_TIKTOK} is ${isLive ? "Not Live" : "Live"}`,
+            caption: `${USERNAME_TIKTOK} is ${isLive ? "live" : "not live"}`,
           }
         );
         console.log("Screenshot sent to Telegram");
@@ -80,7 +82,7 @@ module.exports = async (req, res) => {
       }
       res.status(200).json({
         message: `User ${
-          isLive ? "is not Live" : "is live, screenshot sent to Telegram"
+          isLive ? "is live, screenshot sent to Telegram" : "is not Live"
         }`,
       });
     } catch (e) {
