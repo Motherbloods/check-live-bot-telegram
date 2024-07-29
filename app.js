@@ -63,7 +63,7 @@ module.exports = async (req, res) => {
           USERNAME_TELEGRAM,
           Buffer.from(screenshot, "base64"),
           {
-            caption: `${USERNAME_TIKTOK} is ${isLive ? "live" : "not live"}`,
+            caption: `${USERNAME_TIKTOK}`,
           }
         );
         console.log("Screenshot sent to Telegram");
