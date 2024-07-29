@@ -35,10 +35,21 @@ module.exports = async (req, res) => {
         timeout: 60000,
       });
 
+      try {
+        // Tunggu elemen spesifik yang menunjukkan status live
+        await page.waitForSelector("div[data-xgplayerid]", { timeout: 10000 });
+      } catch (error) {
+        console.error(
+          "Elemen status live tidak ditemukan dalam waktu yang ditentukan"
+        );
+      }
+
       const isLive = await page.evaluate(() => {
-        return document.body.innerText.includes("LIVE has ended");
+        // Periksa keberadaan elemen yang menunjukkan live
+        const liveElement = document.querySelector("div[data-xgplayerid]");
+        return !!liveElement;
       });
-      console.log(`Is ${USERNAME_TIKTOK} live:`, isLive, "kalau ini ", !isLive);
+      console.log(`Is ${USERNAME_TIKTOK} live:`, isLive);
 
       console.log(
         "User is live. Waiting for 10 seconds before taking screenshot..."
