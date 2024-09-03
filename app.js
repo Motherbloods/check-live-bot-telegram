@@ -47,6 +47,7 @@ module.exports = async (req, res) => {
       //     isLive ? "live" : "not live"
       //   } Waiting for 10 seconds before taking screenshot...`
       // );
+      console.log(`https://www.tiktok.com/${USERNAME_TIKTOK}/live`);
       try {
         for (let i = 1; i <= 30; i++) {
           await new Promise((resolve) =>
